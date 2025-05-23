@@ -31,8 +31,8 @@ def receive_signal():
         usdt_amount = float(data.get("usdt_amount", 40))
 
         # Получаем последнюю цену
-        price_info = session.get_latest_price(symbol=symbol)
-        mark_price = float(price_info["result"]["list"][0]["price"])
+        price_info = session.get_tickers(symbol=symbol)
+        mark_price = float(price_info["result"]["list"][0]["lastPrice"])
 
         # Вычисляем количество
         quantity = round(usdt_amount / mark_price, 3)
