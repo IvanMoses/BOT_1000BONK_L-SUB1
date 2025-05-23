@@ -10,7 +10,7 @@ app = Flask(__name__)
 session = HTTP(
     api_key=os.getenv("BYBIT_API_KEY"),
     api_secret=os.getenv("BYBIT_API_SECRET"),
-    testnet=True
+    testnet=True  # False — если ты торгуешь на реальном аккаунте
 )
 
 @app.route("/signal", methods=["POST"])
@@ -27,14 +27,18 @@ def receive_signal():
         stop_loss_pct = float(data.get("stop_loss_pct", 9.0))
         usdt_amount = float(data.get("usdt_amount", 40))
 
+        # Получение последней цены
         price_info = session.get_latest_price(symbol=symbol)
         mark_price = float(price_info["result"]["price"])
+
+        # Вычисление количества
         quantity = round(usdt_amount / mark_price, 3)
 
-        order_price = mark_price
-        take_profit_price = round(order_price * (1 + take_profit_pct / 100), 3)
-        stop_loss_price = round(order_price * (1 - stop_loss_pct / 100), 3)
+        # Цены TP и SL
+        take_profit_price = round(mark_price * (1 + take_profit_pct / 100), 3)
+        stop_loss_price = round(mark_price * (1 - stop_loss_pct / 100), 3)
 
+        # Отправка ордера
         order = session.place_order(
             category="linear",
             symbol=symbol,
@@ -49,8 +53,9 @@ def receive_signal():
         return jsonify(order)
 
     except Exception as e:
-    import traceback
-    traceback.print_exc()
-    return jsonify({"error": str(e)}), 500
+        import traceback
+        traceback.print_exc()
+        return jsonify({"error": str(e)}), 500
+
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=int(os.environ.get("PORT", 7000)))
