@@ -23,8 +23,8 @@ def webhook():
     try:
         symbol = data.get("symbol")
         side = data.get("side", "buy").lower()
-        take_profit_pct = float(data.get("take_profit_pct", 1.5))
-        stop_loss_pct = float(data.get("stop_loss_pct", 0.7))
+        take_profit_pct = float(data.get("take_profit_pct", 2.0))
+        stop_loss_pct = float(data.get("stop_loss_pct", 9.0))
         usdt_amount = float(data.get("usdt_amount", 40))
 
         # Получение последней цены

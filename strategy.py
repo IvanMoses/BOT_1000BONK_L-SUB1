@@ -20,8 +20,8 @@ def receive_signal():
 
         # Опциональные параметры
         usdt_amount = data.get("usdt_amount", 40)
-        tp_pct = data.get("take_profit_pct", 1.5)
-        sl_pct = data.get("stop_loss_pct", 0.7)
+        tp_pct = data.get("take_profit_pct", 2.0)
+        sl_pct = data.get("stop_loss_pct", 9.0)
 
         payload = {
             "symbol": symbol,
