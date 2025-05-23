@@ -1,4 +1,5 @@
 import os
+import traceback
 from flask import Flask, request, jsonify
 from dotenv import load_dotenv
 from pybit.unified_trading import HTTP
@@ -55,7 +56,8 @@ def receive_signal():
         return jsonify(order)
 
     except Exception as e:
-        return jsonify({"error": str(e)}), 500
+    traceback.print_exc()  # Это выведет полную ошибку в логах Render
+    return jsonify({"error": str(e)}), 500
 
 # Запускаем сервер
 if __name__ == "__main__":
