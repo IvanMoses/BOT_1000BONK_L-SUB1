@@ -13,8 +13,8 @@ session = HTTP(
     testnet=True
 )
 
-@app.route('/webhook', methods=['POST'])
-def webhook():
+@app.route("/signal", methods=["POST"])
+def receive_signal():
     data = request.json
 
     if not data:
@@ -27,16 +27,11 @@ def webhook():
         stop_loss_pct = float(data.get("stop_loss_pct", 9.0))
         usdt_amount = float(data.get("usdt_amount", 40))
 
-        # Получение последней цены
         price_info = session.get_latest_price(symbol=symbol)
         mark_price = float(price_info["result"]["price"])
-
-        # Вычисление количества
         quantity = round(usdt_amount / mark_price, 3)
 
-        # Получение цены входа
         order_price = mark_price
-
         take_profit_price = round(order_price * (1 + take_profit_pct / 100), 3)
         stop_loss_price = round(order_price * (1 - stop_loss_pct / 100), 3)
 
