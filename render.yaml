@@ -11,3 +11,9 @@ services:
         sync: false
       - key: BASE_URL
         sync: false
+      - key: DEFAULT_USDT_AMOUNT
+        sync: false
+      - key: TP_PCT
+        sync: false
+      - key: SL_PCT
+        sync: false
